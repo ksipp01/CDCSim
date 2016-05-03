@@ -3,22 +3,21 @@
 //
 // ASCOM Camera driver for Simulator
 //
-// Description:	A very basic Camera simulator.
+// Description:	    A multipurpose camera simular with real time focus and Cartes du Ceil screen capture
 //
-// Implements:	ASCOM Camera interface version: 1.0
-// Author:		Bob Denny <rdenny@dc3.com>
-//				using Matthias Busch's VB6 Camera Simulator and Chris Rowland's
-//				C#.NET Camera Driver template.
+// Implements:	    ASCOM Camera interface version: 1.0
+// Author:	        Kevin Sipprell <k.sipprell@mchsi.com>
+//                  Using  the original version by Bob Denny <rdenny@dc3.com> 
+//				    Using Matthias Busch's VB6 Camera Simulator and Chris Rowland's
+//				    C#.NET Camera Driver template.
+//
 //
 // Edit Log:
 //
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
-// 14-Oct-2007	rbd	1.0.0	Initial edit, from ASCOM Camera Driver template
-// 09-Jan-2009  cdr 6.0.0   Get the basic functionality working, some V2 properties in place but no interface
-// 22-Jan-2009  cdr 6.0.0   More functionality, including temperature, noise, image
-// 03-Oct-2010  cdr 6.0.0   Should be close to complete.
-// 09-Jan-2010  cdr 6.0.0   Simple implementation of PulseGuide. Does nothing except manipulate isPulseGuiding
+// 02-May-2016	kds	1.0.0	Initial edit, from ASCOM Camera Simulator
+//
 // --------------------------------------------------------------------------------
 //
 
