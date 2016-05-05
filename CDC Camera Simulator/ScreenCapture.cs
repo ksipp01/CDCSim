@@ -6,6 +6,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Threading;
 
 
 
@@ -17,11 +18,13 @@ namespace ASCOM.SimCDC
         Camera camera;
     //    SetupDialogForm sdf = new SetupDialogForm();
         Blur blr = new Blur();
-     //   SetupDialogForm setup = new SetupDialogForm();
-      //  string fullPath = @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator";
-      //  string fullPath = @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator\bin\Debug";
+        //   SetupDialogForm setup = new SetupDialogForm();
+        //  string fullPath = @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator";
+        //  string fullPath = @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator\bin\Debug";
+        //   string fullPath = Path.GetDirectoryName(SetupDialogForm.CapturePath);
         string fullPath = Path.GetDirectoryName(SetupDialogForm.CapturePath);
-    //    string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((this.GetType())).Location);
+
+        //    string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((this.GetType())).Location);
         /// <summary>
         /// Creates an Image object containing a screen shot of the entire desktop
         /// </summary>
@@ -174,17 +177,49 @@ namespace ASCOM.SimCDC
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
-       
+
+        // add
+        [DllImport("user32.dll", EntryPoint = "GetSystemMetrics")]
+        public static extern int GetSystemMetrics(int which);
+        [DllImport("user32.dll")]
+        public static extern void
+       SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter,
+                    int X, int Y, int width, int height, uint flags);
+        private static IntPtr HWND_TOP = IntPtr.Zero;
+        private const int SWP_SHOWWINDOW = 64; // 0x0040
+        private const int SM_CXSCREEN = 0;
+        private const int SM_CYSCREEN = 1;
+        public static int ScreenX
+        {
+            get { return GetSystemMetrics(SM_CXSCREEN); }
+        }
+
+        public static int ScreenY
+        {
+            get { return GetSystemMetrics(SM_CYSCREEN); }
+        }
+        public static void SetWinFullScreen(IntPtr hwnd)
+        {
+            SetWindowPos(hwnd, HWND_TOP, 0, 0, ScreenX, ScreenY, SWP_SHOWWINDOW);
+        }
+
+//end add
+
+
 
         public void GetCapture()
         {
 
             IntPtr handle = FindWindow("Window", "Cartes du Ciel - Chart_1");
+            SetForegroundWindow(handle);
+            SetWinFullScreen(handle);
+            System.Threading.Thread.Sleep(500);
             ScreenCapture sc = new ScreenCapture();
             Image img = sc.CaptureScreen();
         //    sc.CaptureWindowToFile(handle, "C:\\atest3\\TestCapture.jpg", ImageFormat.Jpeg);
         //    sc.CaptureWindowToFile(handle, @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator\bin\Debug\TestCapture.jpg", ImageFormat.Jpeg);
        //     sc.CaptureWindowToFile(handle,  Path.Combine(fullPath, @"TestCapture.bmp"), ImageFormat.Bmp);
+       //     sc.CaptureWindowToFile(handle, Path.Combine(fullPath, @"SimCapture.jpg"), ImageFormat.Jpeg);
             sc.CaptureWindowToFile(handle, Path.Combine(fullPath, @"SimCapture.jpg"), ImageFormat.Jpeg);
         }
     }

@@ -129,7 +129,8 @@ namespace ASCOM.SimCDC
             this.textBoxFocusStepSize.Text = theCamera.FocusStepSize.ToString(CultureInfo.CurrentCulture);
             this.checkBoxUseFocusSim.Checked = theCamera.useFocusSim;
 
-            CapturePath = theCamera.imagePath;
+            //  CapturePath = theCamera.imagePath;
+            CapturePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ASCOM_SimCDC_Camera";
 
             this.camera = theCamera;
         }
