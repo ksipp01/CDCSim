@@ -98,6 +98,7 @@ namespace ASCOM.SimCDC
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxFocusStepSize = new System.Windows.Forms.TextBox();
             this.textBoxFocusPoint = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -622,6 +623,7 @@ namespace ASCOM.SimCDC
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button1);
             this.groupBox2.Controls.Add(this.buttonCapture);
             this.groupBox2.Controls.Add(this.buttonSetImageFile);
             this.groupBox2.Controls.Add(this.checkBoxApplyNoise);
@@ -636,7 +638,7 @@ namespace ASCOM.SimCDC
             // 
             this.buttonCapture.Location = new System.Drawing.Point(13, 68);
             this.buttonCapture.Name = "buttonCapture";
-            this.buttonCapture.Size = new System.Drawing.Size(82, 24);
+            this.buttonCapture.Size = new System.Drawing.Size(57, 24);
             this.buttonCapture.TabIndex = 3;
             this.buttonCapture.Text = "Capture";
             this.buttonCapture.UseVisualStyleBackColor = true;
@@ -811,6 +813,16 @@ namespace ASCOM.SimCDC
             this.textBoxFocusPoint.Size = new System.Drawing.Size(46, 20);
             this.textBoxFocusPoint.TabIndex = 0;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(77, 70);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(33, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Set";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -932,5 +944,6 @@ namespace ASCOM.SimCDC
         private System.Windows.Forms.TextBox textBoxFocusPoint;
         private System.Windows.Forms.CheckBox checkBoxUseFocusSim;
         private System.Windows.Forms.Button buttonCapture;
-	}
+        private System.Windows.Forms.Button button1;
+    }
 }

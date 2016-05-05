@@ -128,6 +128,10 @@ namespace ASCOM.SimCDC
             this.textBoxFocusPoint.Text = theCamera.FocusPoint.ToString(CultureInfo.CurrentCulture);
             this.textBoxFocusStepSize.Text = theCamera.FocusStepSize.ToString(CultureInfo.CurrentCulture);
             this.checkBoxUseFocusSim.Checked = theCamera.useFocusSim;
+            
+
+
+
 
             //  CapturePath = theCamera.imagePath;
             CapturePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ASCOM_SimCDC_Camera";
@@ -139,6 +143,8 @@ namespace ASCOM.SimCDC
         public static int FocusStepSize;
         public static int Height;
         public static int Width;
+        public static int xPoint;
+        public static int yPoint;
         public static string CapturePath;
 
         private void SaveProperties()
@@ -146,13 +152,15 @@ namespace ASCOM.SimCDC
             Log.Enabled = checkBoxLogging.Checked;
             camera.pixelSizeX = double.Parse(this.textBoxPixelSizeX.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
             camera.pixelSizeY = double.Parse(this.textBoxPixelSizeY.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
+          
             //camera.fullWellCapacity = Convert.ToDouble(this.textBoxFullWellCapacity.Text, CultureInfo.InvariantCulture);
             camera.maxADU = int.Parse(this.textBoxMaxADU.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
             camera.electronsPerADU = double.Parse(this.textBoxElectronsPerADU.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
 
-            camera.cameraXSize = int.Parse(this.textBoxCameraXSize.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
-           
-            camera.cameraYSize = int.Parse(this.textBoxCameraYSize.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
+          //  camera.cameraXSize = int.Parse(this.textBoxCameraXSize.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
+            camera.cameraXSize = Width;
+            camera.cameraYSize = Height;
+         //   camera.cameraYSize = int.Parse(this.textBoxCameraYSize.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
             
             camera.canAsymmetricBin = this.checkBoxCanAsymmetricBin.Checked;
             camera.maxBinX = short.Parse(this.textBoxMaxBinX.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
@@ -181,6 +189,9 @@ namespace ASCOM.SimCDC
             camera.focusStepSize = int.Parse(this.textBoxFocusStepSize.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
             FocusStepSize = camera.focusStepSize;
             camera.useFocusSim = this.checkBoxUseFocusSim.Checked;
+            camera.xPoint = xPoint;
+            camera.yPoint = yPoint;
+
 
             // add
             
@@ -353,6 +364,23 @@ namespace ASCOM.SimCDC
         private void textBoxCameraXSize_Validated(object sender, EventArgs e)
         {
             Width = int.Parse(this.textBoxCameraXSize.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
+        }
+
+        //add for selectcapturewindow
+
+       
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //ControlPanel cp = new ControlPanel();
+            //cp.InstanceRef = this;
+            //cp.Show();
+
+
+          //  this.Hide();
+            SelectCaptureWindow scw = new SelectCaptureWindow();
+            scw.InstanceRef = this;
+            scw.Show();
+
         }
     }
 }

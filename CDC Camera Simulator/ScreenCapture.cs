@@ -22,7 +22,8 @@ namespace ASCOM.SimCDC
         //  string fullPath = @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator";
         //  string fullPath = @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator\bin\Debug";
         //   string fullPath = Path.GetDirectoryName(SetupDialogForm.CapturePath);
-        string fullPath = Path.GetDirectoryName(SetupDialogForm.CapturePath);
+       // string fullPath = Path.GetDirectoryName(SetupDialogForm.CapturePath);
+        string fullPath = SetupDialogForm.CapturePath;
 
         //    string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((this.GetType())).Location);
         /// <summary>
@@ -47,7 +48,7 @@ namespace ASCOM.SimCDC
             User32.RECT windowRect = new User32.RECT();
             User32.GetWindowRect(handle, ref windowRect);
 
-
+         
 
             //   int width = windowRect.right - windowRect.left;
             //   int height = windowRect.bottom - windowRect.top;
@@ -56,6 +57,8 @@ namespace ASCOM.SimCDC
             //int height = 600;
             int width = SetupDialogForm.Width;
             int height = SetupDialogForm.Height;
+            int xPoint = SetupDialogForm.xPoint;
+            int yPoint = SetupDialogForm.yPoint;
 
 
             // create a device context we can copy to
@@ -66,7 +69,9 @@ namespace ASCOM.SimCDC
             // select the bitmap object
             IntPtr hOld = GDI32.SelectObject(hdcDest, hBitmap);
             // bitblt over
-            GDI32.BitBlt(hdcDest, 0, 0, width, height, hdcSrc, 500, 300, GDI32.SRCCOPY);
+           
+            //   GDI32.BitBlt(hdcDest, 0, 0, width, height, hdcSrc, 500, 300, GDI32.SRCCOPY);
+            GDI32.BitBlt(hdcDest, 0, 0, width, height, hdcSrc, xPoint, yPoint, GDI32.SRCCOPY);
             // restore selection
             GDI32.SelectObject(hdcDest, hOld);
             // clean up
@@ -179,29 +184,29 @@ namespace ASCOM.SimCDC
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         // add
-        [DllImport("user32.dll", EntryPoint = "GetSystemMetrics")]
-        public static extern int GetSystemMetrics(int which);
-        [DllImport("user32.dll")]
-        public static extern void
-       SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter,
-                    int X, int Y, int width, int height, uint flags);
-        private static IntPtr HWND_TOP = IntPtr.Zero;
-        private const int SWP_SHOWWINDOW = 64; // 0x0040
-        private const int SM_CXSCREEN = 0;
-        private const int SM_CYSCREEN = 1;
-        public static int ScreenX
-        {
-            get { return GetSystemMetrics(SM_CXSCREEN); }
-        }
+       // [DllImport("user32.dll", EntryPoint = "GetSystemMetrics")]
+       // public static extern int GetSystemMetrics(int which);
+       // [DllImport("user32.dll")]
+       // public static extern void
+       //SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter,
+       //             int X, int Y, int width, int height, uint flags);
+       // private static IntPtr HWND_TOP = IntPtr.Zero;
+       // private const int SWP_SHOWWINDOW = 64; // 0x0040
+       // private const int SM_CXSCREEN = 0;
+       // private const int SM_CYSCREEN = 1;
+       // public static int ScreenX
+       // {
+       //     get { return GetSystemMetrics(SM_CXSCREEN); }
+       // }
 
-        public static int ScreenY
-        {
-            get { return GetSystemMetrics(SM_CYSCREEN); }
-        }
-        public static void SetWinFullScreen(IntPtr hwnd)
-        {
-            SetWindowPos(hwnd, HWND_TOP, 0, 0, ScreenX, ScreenY, SWP_SHOWWINDOW);
-        }
+       // public static int ScreenY
+       // {
+       //     get { return GetSystemMetrics(SM_CYSCREEN); }
+       // }
+       // public static void SetWinFullScreen(IntPtr hwnd)
+       // {
+       //     SetWindowPos(hwnd, HWND_TOP, 0, 0, ScreenX, ScreenY, SWP_SHOWWINDOW);
+       // }
 
 //end add
 
@@ -212,8 +217,8 @@ namespace ASCOM.SimCDC
 
             IntPtr handle = FindWindow("Window", "Cartes du Ciel - Chart_1");
             SetForegroundWindow(handle);
-            SetWinFullScreen(handle);
-            System.Threading.Thread.Sleep(500);
+    //        SetWinFullScreen(handle);
+     //       System.Threading.Thread.Sleep(500);
             ScreenCapture sc = new ScreenCapture();
             Image img = sc.CaptureScreen();
         //    sc.CaptureWindowToFile(handle, "C:\\atest3\\TestCapture.jpg", ImageFormat.Jpeg);

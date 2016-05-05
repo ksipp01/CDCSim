@@ -98,6 +98,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="ScreenCapture.cs" />
+    <Compile Include="SelectCaptureWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectCaptureWindow.Designer.cs">
+      <DependentUpon>SelectCaptureWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="SetupDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,9 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectCaptureWindow.resx">
+      <DependentUpon>SelectCaptureWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SetupDialogForm.resx">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>

@@ -83,6 +83,11 @@ namespace ASCOM.SimCDC
         private const string STR_FocusPoint = "FocusPoint";
         private const string STR_FocusStepSize = "FocusStepSize";
         private const string STR_UseFocusSim = "UseFocusSim";
+        // add for capturewindowselect
+        private const string STR_XPoint = "XPoint";
+        private const string STR_YPoint = "YPoint";
+
+
 
         #endregion
 
@@ -92,6 +97,9 @@ namespace ASCOM.SimCDC
         internal int focusPoint;
         internal int focusStepSize;
         internal bool useFocusSim;
+        // add for selectcapturewindow
+        internal int xPoint;
+        internal int yPoint;
 
 
 
@@ -1877,6 +1885,9 @@ namespace ASCOM.SimCDC
                 this.focusStepSize = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_FocusStepSize, string.Empty, "100"), CultureInfo.InstalledUICulture);
                 this.useFocusSim = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_UseFocusSim, string.Empty, "true"), CultureInfo.InvariantCulture);
 
+                // add for selectcapturewindow
+                this.xPoint = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_XPoint, string.Empty, "300"), CultureInfo.InstalledUICulture);
+                this.yPoint = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_YPoint, string.Empty, "500"), CultureInfo.InstalledUICulture);
 
                 string gs = profile.GetValue(s_csDriverID, "Gains");
                 if (string.IsNullOrEmpty(gs))
@@ -1961,6 +1972,9 @@ namespace ASCOM.SimCDC
                 profile.WriteValue(s_csDriverID, STR_FocusPoint, this.focusPoint.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_FocusStepSize, this.focusStepSize.ToString(CultureInfo.InvariantCulture));
 
+                // add for selectCaptureWindow
+                profile.WriteValue(s_csDriverID, STR_XPoint, this.xPoint.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_YPoint, this.yPoint.ToString(CultureInfo.InvariantCulture));
 
                 if (this.gains != null && this.gains.Count > 0)
                 {
