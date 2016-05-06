@@ -74,9 +74,9 @@ namespace ASCOM.SimCDC
             this.textBoxElectronsPerADU.Text = theCamera.electronsPerADU.ToString(STR_N2, CultureInfo.CurrentCulture);
 
             this.textBoxCameraXSize.Text = theCamera.cameraXSize.ToString(CultureInfo.CurrentCulture);
-            Width = theCamera.cameraXSize;
+            width = theCamera.cameraXSize;
             this.textBoxCameraYSize.Text = theCamera.cameraYSize.ToString(CultureInfo.CurrentCulture);
-            Height = theCamera.cameraYSize;
+            height = theCamera.cameraYSize;
             this.checkBoxCanAsymmetricBin.Checked = theCamera.canAsymmetricBin;
             this.textBoxMaxBinX.Text = theCamera.maxBinX.ToString(CultureInfo.CurrentCulture);
             this.textBoxMaxBinY.Text = theCamera.maxBinY.ToString(CultureInfo.CurrentCulture);
@@ -129,24 +129,60 @@ namespace ASCOM.SimCDC
             this.textBoxFocusStepSize.Text = theCamera.FocusStepSize.ToString(CultureInfo.CurrentCulture);
             this.checkBoxUseFocusSim.Checked = theCamera.useFocusSim;
             this.checkBoxUseCapture.Checked = theCamera.useCapture;
-
-            // *fix this.  capture path here is just a path, when selecting the image its the full path w/ file name.....
-
-
-            //  CapturePath = theCamera.imagePath;
-            CapturePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ASCOM_SimCDC_Camera";
+            capturePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ASCOM_SimCDC_Camera";
 
             this.camera = theCamera;
         }
 
-        public static int FocusPoint;
-        public static int FocusStepSize;
-        public static int Height;
-        public static int Width;
-        public static int xPoint;
-        public static int yPoint;
-        public static string CapturePath;
+        private static int focusPoint;
+        private static int focusStepSize;
+        private static int height;
+        private static int width;
+        private static int _xPoint;
+        private static int _yPoint;
+        private static string capturePath;
 
+        public static int Height
+        {
+            get { return height; }
+            set { height = value; }
+        }
+        public static int Width
+        {
+            get { return width; }
+            set { width = value; }
+        }
+        public static int FocusPoint
+        {
+            get { return focusPoint; }
+            set { focusPoint = value; }
+        }
+        public static int FocusStepSize
+        {
+            get { return focusStepSize; }
+            set { focusStepSize = value; }
+        }
+        public static int xPoint
+        {
+            get { return _xPoint; }
+            set { _xPoint = value; }
+        }
+        public static int yPoint
+        {
+            get { return _yPoint; }
+            set { _yPoint = value; }
+        }
+        public static string CapturePath
+        {
+            get { return capturePath; }
+            set { capturePath = value; }
+        }
+
+        private void SetCamareValues()
+        {
+            textBoxCameraYSize.Text = width.ToString();
+            textBoxCameraXSize.Text = height.ToString();
+        }
         private void SaveProperties()
         {
             Log.Enabled = checkBoxLogging.Checked;
@@ -185,12 +221,12 @@ namespace ASCOM.SimCDC
 
             //add
             camera.focusPoint = int.Parse(this.textBoxFocusPoint.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
-            FocusPoint = camera.focusPoint;
+            focusPoint = camera.focusPoint;
             camera.focusStepSize = int.Parse(this.textBoxFocusStepSize.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
-            FocusStepSize = camera.focusStepSize;
+            focusStepSize = camera.focusStepSize;
             camera.useFocusSim = this.checkBoxUseFocusSim.Checked;
-            camera.xPoint = xPoint;
-            camera.yPoint = yPoint;
+            camera.xPoint = _xPoint;
+            camera.yPoint = _yPoint;
             if (useCapture)
             camera.imagePath = Path.Combine(CapturePath, @"SimCapture.jpg");
             camera.useCapture = this.checkBoxUseCapture.Checked;
@@ -280,19 +316,7 @@ namespace ASCOM.SimCDC
         }
 
 
-       
-        //public int FocusPoint()
-        //{
-        //    return focusPoint;
-        //}
-        //public int FocusStepSize()
-        //{
-        //    return focusStepSize;
-        //}
-
-
-
-        private string focusId;
+       private string focusId;
 
         private bool IsConnected
         {
@@ -345,8 +369,10 @@ namespace ASCOM.SimCDC
 
         private void buttonCapture_Click(object sender, EventArgs e)
         {
+            SetCamareValues();
             ScreenCapture sc = new ScreenCapture();
             sc.GetCapture();
+           
         }
 
         private void textBoxCameraXSize_TextChanged(object sender, EventArgs e)
@@ -372,7 +398,7 @@ namespace ASCOM.SimCDC
         //add for selectcapturewindow
 
        
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)// set capture size button
         {
             //ControlPanel cp = new ControlPanel();
             //cp.InstanceRef = this;
@@ -383,7 +409,7 @@ namespace ASCOM.SimCDC
             SelectCaptureWindow scw = new SelectCaptureWindow();
             scw.InstanceRef = this;
             scw.Show();
-
+      
         }
         private bool useCapture;
         public bool UseCapture

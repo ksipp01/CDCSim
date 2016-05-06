@@ -7,6 +7,10 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading;
+using System.Windows.Forms;
+using System.Windows;
+
+
 
 
 
@@ -16,14 +20,14 @@ namespace ASCOM.SimCDC
     {
 
         Camera camera;
-    //    SetupDialogForm sdf = new SetupDialogForm();
+        //    SetupDialogForm sdf = new SetupDialogForm();
         Blur blr = new Blur();
         //   SetupDialogForm setup = new SetupDialogForm();
         //  string fullPath = @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator";
         //  string fullPath = @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator\bin\Debug";
         //   string fullPath = Path.GetDirectoryName(SetupDialogForm.CapturePath);
         string fullPath = SetupDialogForm.CapturePath;
-       // string fullPath = SetupDialogForm.CapturePath;
+        // string fullPath = SetupDialogForm.CapturePath;
 
         //    string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((this.GetType())).Location);
         /// <summary>
@@ -42,13 +46,14 @@ namespace ASCOM.SimCDC
         /// <returns></returns>
         public Image CaptureWindow(IntPtr handle)
         {
+
             // get te hDC of the target window
             IntPtr hdcSrc = User32.GetWindowDC(handle);
             // get the size
             User32.RECT windowRect = new User32.RECT();
             User32.GetWindowRect(handle, ref windowRect);
 
-         
+
 
             //   int width = windowRect.right - windowRect.left;
             //   int height = windowRect.bottom - windowRect.top;
@@ -69,7 +74,7 @@ namespace ASCOM.SimCDC
             // select the bitmap object
             IntPtr hOld = GDI32.SelectObject(hdcDest, hBitmap);
             // bitblt over
-           
+
             //   GDI32.BitBlt(hdcDest, 0, 0, width, height, hdcSrc, 500, 300, GDI32.SRCCOPY);
             GDI32.BitBlt(hdcDest, 0, 0, width, height, hdcSrc, xPoint, yPoint, GDI32.SRCCOPY);
             // restore selection
@@ -82,6 +87,8 @@ namespace ASCOM.SimCDC
             // free up the Bitmap object
             GDI32.DeleteObject(hBitmap);
             return img;
+
+
         }
         /// <summary>
         /// Captures a screen shot of a specific window, and saves it to a file
@@ -90,31 +97,38 @@ namespace ASCOM.SimCDC
         /// <param name="filename"></param>
         /// <param name="format"></param>
 
-       private int focusPos = 25000;
+        private int focusPos = 25000;
 
         public void CaptureWindowToFile(IntPtr handle, string filename, ImageFormat format)
         {
-            if (System.IO.File.Exists(filename))
+            try
             {
-                System.IO.File.Delete(filename);
+                if (System.IO.File.Exists(filename))
+                {
+                    System.IO.File.Delete(filename);
+                }
+
+                Image img = CaptureWindow(handle);
+                Bitmap bmp = (Bitmap)img;
+                //      int pos = setup.focuser.Position;
+
+                //  int pos = SetupDialogForm.focuser.Position;
+                //   int amount = Math.Abs(pos / 100 - focusPos  / 100);
+                if (SetupDialogForm.FocusStepSize != 0)  // first run capture can't use this.  
+                {
+                    int amount = Math.Abs(SetupDialogForm.focuser.Position / SetupDialogForm.FocusStepSize - SetupDialogForm.FocusPoint / SetupDialogForm.FocusStepSize);
+                    if (amount > 10)
+                        amount = 10;
+                    //   if (((focusPos - pos) > 100) || ((pos-focusPos > 100)))
+                    if (amount > 0)
+                        img = blr.ApplyBlur(bmp, amount + 1);
+                }
+                img.Save(filename, format);
             }
-
-            Image img = CaptureWindow(handle);
-            Bitmap bmp = (Bitmap)img;
-      //      int pos = setup.focuser.Position;
-
-          //  int pos = SetupDialogForm.focuser.Position;
-         //   int amount = Math.Abs(pos / 100 - focusPos  / 100);
-            if (SetupDialogForm.FocusStepSize != 0)  // first run capture can't use this.  
+            catch (Exception e)
             {
-                int amount = Math.Abs(SetupDialogForm.focuser.Position / SetupDialogForm.FocusStepSize - SetupDialogForm.FocusPoint / SetupDialogForm.FocusStepSize);
-                if (amount > 10)
-                    amount = 10;
-                //   if (((focusPos - pos) > 100) || ((pos-focusPos > 100)))
-                if (amount > 0)
-                    img = blr.ApplyBlur(bmp, amount +1);
+                Log.LogMessage("CaptureWindowToFileFailure", e.ToString(), filename);
             }
-            img.Save(filename, format);
         }
         /// <summary>
         /// Captures a screen shot of the entire desktop, and saves it to a file
@@ -184,48 +198,54 @@ namespace ASCOM.SimCDC
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         // add
-       // [DllImport("user32.dll", EntryPoint = "GetSystemMetrics")]
-       // public static extern int GetSystemMetrics(int which);
-       // [DllImport("user32.dll")]
-       // public static extern void
-       //SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter,
-       //             int X, int Y, int width, int height, uint flags);
-       // private static IntPtr HWND_TOP = IntPtr.Zero;
-       // private const int SWP_SHOWWINDOW = 64; // 0x0040
-       // private const int SM_CXSCREEN = 0;
-       // private const int SM_CYSCREEN = 1;
-       // public static int ScreenX
-       // {
-       //     get { return GetSystemMetrics(SM_CXSCREEN); }
-       // }
+        [DllImport("user32.dll", EntryPoint = "GetSystemMetrics")]
+        public static extern int GetSystemMetrics(int which);
+        [DllImport("user32.dll")]
+        public static extern void
+       SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter,
+                    int X, int Y, int width, int height, uint flags);
+        private static IntPtr HWND_TOP = IntPtr.Zero;
+        private const int SWP_SHOWWINDOW = 64; // 0x0040
+        private const int SM_CXSCREEN = 0;
+        private const int SM_CYSCREEN = 1;
+        public static int ScreenX
+        {
+            get { return GetSystemMetrics(SM_CXSCREEN); }
+        }
 
-       // public static int ScreenY
-       // {
-       //     get { return GetSystemMetrics(SM_CYSCREEN); }
-       // }
-       // public static void SetWinFullScreen(IntPtr hwnd)
-       // {
-       //     SetWindowPos(hwnd, HWND_TOP, 0, 0, ScreenX, ScreenY, SWP_SHOWWINDOW);
-       // }
+        public static int ScreenY
+        {
+            get { return GetSystemMetrics(SM_CYSCREEN); }
+        }
+        public static void SetWinFullScreen(IntPtr hwnd)
+        {
+            SetWindowPos(hwnd, HWND_TOP, 0, 0, ScreenX, ScreenY, SWP_SHOWWINDOW);
+        }
 
-//end add
+        //end add
 
+      
+     
 
 
         public void GetCapture()
         {
-
-            IntPtr handle = FindWindow("Window", "Cartes du Ciel - Chart_1");
-            SetForegroundWindow(handle);
-    //        SetWinFullScreen(handle);
-     //       System.Threading.Thread.Sleep(500);
-            ScreenCapture sc = new ScreenCapture();
-            Image img = sc.CaptureScreen();
-        //    sc.CaptureWindowToFile(handle, "C:\\atest3\\TestCapture.jpg", ImageFormat.Jpeg);
-        //    sc.CaptureWindowToFile(handle, @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator\bin\Debug\TestCapture.jpg", ImageFormat.Jpeg);
-       //     sc.CaptureWindowToFile(handle,  Path.Combine(fullPath, @"TestCapture.bmp"), ImageFormat.Bmp);
-       //     sc.CaptureWindowToFile(handle, Path.Combine(fullPath, @"SimCapture.jpg"), ImageFormat.Jpeg);
-            sc.CaptureWindowToFile(handle, Path.Combine(fullPath, @"SimCapture.jpg"), ImageFormat.Jpeg);
+            try
+            {
+                IntPtr handle = FindWindow("Window", "Cartes du Ciel - Chart_1");
+                SetForegroundWindow(handle);
+           //     SetWinFullScreen(handle);
+                System.Threading.Thread.Sleep(200);
+                ScreenCapture sc = new ScreenCapture();
+                Image img = sc.CaptureScreen();
+                sc.CaptureWindowToFile(handle, Path.Combine(fullPath, @"SimCapture.jpg"), ImageFormat.Jpeg);
+            }
+            catch (Exception e)
+            {
+                Log.LogMessage("GetPature failure", e.ToString(), fullPath);
+            }
         }
     }
+  
+
 }
