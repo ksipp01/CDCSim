@@ -37,14 +37,18 @@ Chris Rowland
 Additional Features: 
 
 
-Real-time Focus Simulation.  
+Real-time Focus Simulation: 
 This Camera Driver Simulator MUST (for now) connect to an ASCOM focuser and will apply image blurring based on focuser position.  
-Use:  You must press the Properties button when connecting to the driver, then the Focus chooser will display, select your ASCOM Focuser. 
+
+To Use:  You must press the Properties button when connecting to the driver, then the Focus chooser will display, select your ASCOM Focuser. 
 The camera setup dialog with then display.  Define the Focus Point position and the Step Size.  The Step size is the amount of focus position change that will cause blurring. For example, with a setting of 100, each 100 step change in focus position will result in an incremental increased blurring)  The image will only blur to 10 times the step size, further focuser movement will not change the image.     
 
 Cartes du Ciel (CDC) Screen Capture and telescope tracking for plate solve simulation.    
 CDC A free planetarium program (https://www.ap-i.net/skychart/en/start) that can connect to an ASCOM Mount and follow the mount.  This can be used for testing automation software plate solving.  
+This works best with dual displays but can be done on one.  
 Set up as follows: 
-Open CDC, Connect to ASCOM Mount.  Use Setup -> Display -> Finder rectangle to define a FOV that matches your Imaging chip.  Adjust rotation so the rectangle is square in the FOV.  Set the CDC FOV (Setup -> set FOV) so the CCD rectangle is completely visible in the center of the entire FOV and takes up about 50% of the entire FOV.  This acts as an aide to know how big to set the Image size in the Camera Setup menu.  800 x 600 is default.  In The camera Setup Menu, press capture, then press use image, select navigate to the saved image called  (C:\....\SimCapture.jpg) and select it. Now use a photo viewing program to view the image and compare and adjust it's size and contents to the desired FOV as displayed in CDC.  Repeat the Capture and view in image viewer until the size matches your imaging FOV.  (This only needs to be done once).  Now the image should be close to your normal setup and should plate solve properly.  
+Open CDC, Connect to ASCOM Mount.  Use Setup -> Display -> Finder rectangle to define a FOV that matches your Imaging chip.  Adjust rotation so the rectangle is square in the FOV.  Set the CDC FOV (Setup -> set FOV) so the CCD rectangle is completely visible in the center of the entire FOV and takes up about 50% of the entire FOV, make Sure CDC is maximized(full screen) AND on Primary display, for now.  If only using 1 display, remember about where the bounds of the CCD rectangle are, you will have imaging application and setup windows over part of CDC, that's ok) Make sure "Screen Capture" is checked. Press the Set button then Left click and drag the mouse over the CCD FOV rectangle, then double click to set.  Click Ok to close setup, then OK to close chooser.  The CDC window can now be moved to secondary display now but needs to be maximized to preserve the FOV selection.  
+If CDC capture is not wanted, but focus simulation is, Push Select Image and navigiate to a desired image.  Adjust the CCD Height and Width in the Setup menu as needed.  (The Screen Capture check box will automatically uncheck when selecting a specific image).   
+  
 
      
