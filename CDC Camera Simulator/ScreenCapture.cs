@@ -22,7 +22,7 @@ namespace ASCOM.SimCDC
         //  string fullPath = @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator";
         //  string fullPath = @"C:\Users\Public\CDC_CamSimulator\CDC Camera Simulator\CDC Camera Simulator\bin\Debug";
         //   string fullPath = Path.GetDirectoryName(SetupDialogForm.CapturePath);
-        string fullPath = Path.GetDirectoryName(SetupDialogForm.CapturePath);
+        string fullPath = SetupDialogForm.CapturePath;
        // string fullPath = SetupDialogForm.CapturePath;
 
         //    string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((this.GetType())).Location);

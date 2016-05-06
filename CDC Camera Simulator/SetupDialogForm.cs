@@ -128,9 +128,9 @@ namespace ASCOM.SimCDC
             this.textBoxFocusPoint.Text = theCamera.FocusPoint.ToString(CultureInfo.CurrentCulture);
             this.textBoxFocusStepSize.Text = theCamera.FocusStepSize.ToString(CultureInfo.CurrentCulture);
             this.checkBoxUseFocusSim.Checked = theCamera.useFocusSim;
-            
+            this.checkBoxUseCapture.Checked = theCamera.useCapture;
 
-
+            // *fix this.  capture path here is just a path, when selecting the image its the full path w/ file name.....
 
 
             //  CapturePath = theCamera.imagePath;
@@ -191,10 +191,11 @@ namespace ASCOM.SimCDC
             camera.useFocusSim = this.checkBoxUseFocusSim.Checked;
             camera.xPoint = xPoint;
             camera.yPoint = yPoint;
-
-
+            if (useCapture)
+            camera.imagePath = Path.Combine(CapturePath, @"SimCapture.jpg");
+            camera.useCapture = this.checkBoxUseCapture.Checked;
             // add
-            
+
 
 
 
@@ -238,7 +239,9 @@ namespace ASCOM.SimCDC
             openFileDialog1.FileName = Path.GetFileName(camera.imagePath);
             openFileDialog1.ShowDialog();
             camera.imagePath = openFileDialog1.FileName;
-            CapturePath = camera.imagePath;
+            useCapture = false;
+            checkBoxUseCapture.Checked = false;
+          //  CapturePath = Path.GetDirectoryName(camera.imagePath);
         }
 
         private void checkBoxInterfaceVersion_CheckedChanged(object sender, EventArgs e)
@@ -374,13 +377,26 @@ namespace ASCOM.SimCDC
             //ControlPanel cp = new ControlPanel();
             //cp.InstanceRef = this;
             //cp.Show();
-
-
-          //  this.Hide();
+            CapturePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ASCOM_SimCDC_Camera";
+            camera.imagePath = Path.Combine(CapturePath, @"SimCapture.jpg");
+            //  this.Hide();
             SelectCaptureWindow scw = new SelectCaptureWindow();
             scw.InstanceRef = this;
             scw.Show();
 
+        }
+        private bool useCapture;
+        public bool UseCapture
+        {
+            get { return useCapture; }
+            set { useCapture = value; }
+        }
+        private void checkBoxUseCapture_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxUseCapture.Checked)
+                useCapture = true;
+            else
+                useCapture = false;
         }
     }
 }

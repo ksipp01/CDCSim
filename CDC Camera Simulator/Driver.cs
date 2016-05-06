@@ -86,6 +86,7 @@ namespace ASCOM.SimCDC
         // add for capturewindowselect
         private const string STR_XPoint = "XPoint";
         private const string STR_YPoint = "YPoint";
+        private const string STR_UseCapture = "UseCapture";
 
 
 
@@ -100,6 +101,7 @@ namespace ASCOM.SimCDC
         // add for selectcapturewindow
         internal int xPoint;
         internal int yPoint;
+        internal bool useCapture;
 
 
 
@@ -1293,6 +1295,7 @@ namespace ASCOM.SimCDC
             }
 
             // add for screen capture
+            if (useCapture)
             sc.GetCapture();
           
             
@@ -1829,7 +1832,7 @@ namespace ASCOM.SimCDC
                 return this.sensorType;
             }
         }
-
+        
         #endregion
 
         #region private
@@ -1877,7 +1880,7 @@ namespace ASCOM.SimCDC
                 this.imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, Path.Combine(fullPath, @"SimCapture.jpg"));
               //  this.imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, "C:\\atest3\\TestCapture.jpg");
                 this.applyNoise = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_ApplyNoise, string.Empty, "false"), CultureInfo.InvariantCulture);
-
+                this.useCapture = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_UseCapture, string.Empty, "true"), CultureInfo.InvariantCulture);
                 this.canPulseGuide = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanPulseGuide, string.Empty, "false"), CultureInfo.InvariantCulture);
 
                 //add for focus simulator
@@ -1975,6 +1978,8 @@ namespace ASCOM.SimCDC
                 // add for selectCaptureWindow
                 profile.WriteValue(s_csDriverID, STR_XPoint, this.xPoint.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_YPoint, this.yPoint.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_UseCapture, this.useCapture.ToString(CultureInfo.InvariantCulture));
+
 
                 if (this.gains != null && this.gains.Count > 0)
                 {
