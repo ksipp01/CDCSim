@@ -1295,7 +1295,7 @@ namespace ASCOM.SimCDC
             }
 
             // add for screen capture
-            if (useCapture)
+     //       if (useCapture)
             sc.GetCapture();
           
             
@@ -2179,6 +2179,7 @@ namespace ASCOM.SimCDC
 
         private delegate void GetData(int x, int y);
         private Bitmap bmp;
+        private Bitmap bmp1;
         // bayer offsets
         private int x0;
         private int x1;
@@ -2199,22 +2200,125 @@ namespace ASCOM.SimCDC
         /// full frame image data.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body")]
-      
+        //  Blur blr;
+        string tempFile = "";
         private void ReadImageFile()
         {
             this.imageData = new float[this.cameraXSize, this.cameraYSize, 1];
             try
             {
 
-                using (FileStream stream = new FileStream(this.imagePath, FileMode.Open, FileAccess.Read))
+                //start group rem here
+                //Image img;
+                //if ((SetupDialogForm.FocusStepSize != 0) & (!SetupDialogForm.UseCapture)) // first run capture can't use this.  
+                //{
+                //    using (FileStream stream = new FileStream(this.imagePath, FileMode.Open, FileAccess.Read))
+                //    {
+                //        bmp1 = (Bitmap)Image.FromStream(stream);
+                //        stream.Close();
+                //        stream.Dispose();
+                //    }
+                //int amount = Math.Abs(SetupDialogForm.focuser.Position / SetupDialogForm.FocusStepSize - SetupDialogForm.FocusPoint / SetupDialogForm.FocusStepSize);
+                //if (amount > 10)
+                //    amount = 10;
+                ////   if (((focusPos - pos) > 100) || ((pos-focusPos > 100)))
+                //if (amount > 0)
+                //{
+                    //        Blur blr = new Blur();
+                    //        // img = blr.ApplyBlur(bmp, amount + 1);
+
+                    //        //img = blr.ApplyBlur(bmp, amount + 1);
+                    //        ////  img = (Image)bmp;
+                    //        //img.Save(this.imagePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    //        bmp = blr.ApplyBlur(bmp1, amount + 1);
+                    //        //  img = (Image)bmp;
+                    //        tempFile = Path.GetDirectoryName(this.imagePath) + @"\" + Path.GetFileNameWithoutExtension(this.imagePath) + "_temp.bmp";
+                    //        bmp.Save(tempFile, System.Drawing.Imaging.ImageFormat.Bmp);
+                    //        //using (FileStream stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read))
+                    //        //{
+                    //        //    bmp = (Bitmap)Image.FromStream(stream);
+                    //        //    stream.Dispose();
+                    //        //}
+
+                    //    }
+                    //    if (amount == 0)
+                    //        bmp = bmp1;
+                    //}
+                    ////if ((SetupDialogForm.FocusStepSize != 0) & (!SetupDialogForm.UseCapture)) // first run capture can't use this.  
+                    ////{
+                    ////    using (FileStream stream = new FileStream(this.imagePath, FileMode.Open, FileAccess.Read))
+                    ////    {
+                    ////        img = Image.FromStream(stream);
+                    ////        stream.Close();
+                    ////        stream.Dispose();
+                    ////    }
+                    ////    Bitmap bmp1 = (Bitmap)img;
+                    ////    int amount = Math.Abs(SetupDialogForm.focuser.Position / SetupDialogForm.FocusStepSize - SetupDialogForm.FocusPoint / SetupDialogForm.FocusStepSize);
+                    ////    if (amount > 10)
+                    ////        amount = 10;
+                    ////    //   if (((focusPos - pos) > 100) || ((pos-focusPos > 100)))
+                    ////    if (amount > 0)
+                    ////    {
+                    ////        Blur blr = new Blur();
+                    ////        // img = blr.ApplyBlur(bmp, amount + 1);
+
+                    ////        //img = blr.ApplyBlur(bmp, amount + 1);
+                    ////        ////  img = (Image)bmp;
+                    ////        //img.Save(this.imagePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    ////        img = blr.ApplyBlur(bmp1, amount + 1);
+                    ////        //  img = (Image)bmp;
+                    ////        tempFile = Path.GetDirectoryName(this.imagePath) + @"\" + Path.GetFileNameWithoutExtension(this.imagePath) + "_temp.jpg";
+                    ////        img.Save(tempFile, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    ////        //using (FileStream stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read))
+                    ////        //{
+                    ////        //    bmp = (Bitmap)Image.FromStream(stream);
+                    ////        //    stream.Dispose();
+                    ////        //}
+
+                    ////    }
+                    ////    if (amount == 0)
+                    ////        bmp = bmp1;
+                    ////}
+                    ////else
+                    ////{
+                    tempFile = Path.GetDirectoryName(this.imagePath) + @"\" + Path.GetFileNameWithoutExtension(this.imagePath) + "_temp.jpg";
+                //int amount = Math.Abs(SetupDialogForm.focuser.Position / SetupDialogForm.FocusStepSize - SetupDialogForm.FocusPoint / SetupDialogForm.FocusStepSize);
+                //if (amount > 10)
+                //    amount = 10;
+                ////   if (((focusPos - pos) > 100) || ((pos-focusPos > 100)))
+                //if (amount > 0)
+                //{
+
+                    if (File.Exists(tempFile))
+                    {
+                        using (FileStream stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read))
+                        {
+                            bmp = (Bitmap)Image.FromStream(stream);
+                            //  bmp = new Bitmap(stream);
+                            stream.Dispose();
+                        }
+                    }
+              //  }
+                else
                 {
-                    bmp = (Bitmap)Image.FromStream(stream);
-                    stream.Dispose();
+                    //emd group rem here and 1 } below
+
+
+                    using (FileStream stream = new FileStream(this.imagePath, FileMode.Open, FileAccess.Read))
+                    {
+                        bmp = (Bitmap)Image.FromStream(stream);
+                        stream.Dispose();
+                    }
+                    //       }  // rem with group above
+
                 }
+
+
                 //x0 = bayerOffsetX;
                 //x1 = (bayerOffsetX + 1) & 1;
                 //y0 = bayerOffsetY;
                 //y1 = (bayerOffsetY + 1) & 1;
+
 
                 GetData getData = new GetData(MonochromeData);
                 switch (this.sensorType)
@@ -2274,11 +2378,13 @@ namespace ASCOM.SimCDC
                         getData(x, y);
                     }
                 }
-               
+                
             }
             catch
             {
             }
+            if (File.Exists(tempFile))
+                File.Delete(tempFile);
         }
 
         // get data using the sensor types

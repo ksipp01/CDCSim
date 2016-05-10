@@ -232,13 +232,58 @@ namespace ASCOM.SimCDC
         {
             try
             {
-                IntPtr handle = FindWindow("Window", "Cartes du Ciel - Chart_1");
-                SetForegroundWindow(handle);
-           //     SetWinFullScreen(handle);
-                System.Threading.Thread.Sleep(200);
-                ScreenCapture sc = new ScreenCapture();
-                Image img = sc.CaptureScreen();
-                sc.CaptureWindowToFile(handle, Path.Combine(fullPath, @"SimCapture.jpg"), ImageFormat.Jpeg);
+
+                if (SetupDialogForm.UseCapture)
+                {
+                    IntPtr handle = FindWindow("Window", "Cartes du Ciel - Chart_1");
+                    SetForegroundWindow(handle);
+                    //     SetWinFullScreen(handle);
+                    System.Threading.Thread.Sleep(200);
+                    ScreenCapture sc = new ScreenCapture();
+                    Image img = sc.CaptureScreen();
+                    sc.CaptureWindowToFile(handle, Path.Combine(fullPath, @"SimCapture.jpg"), ImageFormat.Jpeg);
+                }
+                else
+                {
+
+                    //     string filename = SetupDialogForm.SetImage;
+                    Image img;
+                  //  Bitmap bmp;
+                    string tempFile = Path.GetDirectoryName(SetupDialogForm.SetImage) + @"\" + Path.GetFileNameWithoutExtension(SetupDialogForm.SetImage) + "_temp.jpg";
+                    using (FileStream stream = new FileStream(SetupDialogForm.SetImage, FileMode.Open, FileAccess.Read))
+                    {
+                        img = Image.FromStream(stream);
+                        stream.Dispose();
+                    }
+
+                      Bitmap bmp = (Bitmap)img;
+                    //      int pos = setup.focuser.Position;
+
+                    //  int pos = SetupDialogForm.focuser.Position;
+                    //   int amount = Math.Abs(pos / 100 - focusPos  / 100);
+                    if (SetupDialogForm.FocusStepSize != 0)  // first run capture can't use this.  
+                    {
+
+                        int amount = Math.Abs(SetupDialogForm.focuser.Position / SetupDialogForm.FocusStepSize - SetupDialogForm.FocusPoint / SetupDialogForm.FocusStepSize);
+                        if (amount > 10)
+                            amount = 10;
+                        //   if (((focusPos - pos) > 100) || ((pos-focusPos > 100)))
+                        if (amount > 0)
+                            img = blr.ApplyBlur(bmp, amount + 1);
+                        //
+                        //    bmp = blr.ApplyBlur(bmp, amount + 1);
+                        //  img = (Image)bmp;
+
+                        // bmp.Save(tempFile, System.Drawing.Imaging.ImageFormat.Bmp);
+                        if (amount == 0)
+                            return;
+                    }
+                      img.Save(tempFile, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    
+
+
+
+                }
             }
             catch (Exception e)
             {

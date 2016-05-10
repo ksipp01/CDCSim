@@ -141,6 +141,7 @@ namespace ASCOM.SimCDC
         private static int _xPoint;
         private static int _yPoint;
         private static string capturePath;
+        private static string setImage;
 
         public static int Height
         {
@@ -176,6 +177,11 @@ namespace ASCOM.SimCDC
         {
             get { return capturePath; }
             set { capturePath = value; }
+        }
+        public static string SetImage
+        {
+            get { return setImage; }
+            set { setImage = value; }
         }
 
         private void SetCamareValues()
@@ -277,6 +283,7 @@ namespace ASCOM.SimCDC
             camera.imagePath = openFileDialog1.FileName;
             useCapture = false;
             checkBoxUseCapture.Checked = false;
+            setImage = camera.imagePath;
           //  CapturePath = Path.GetDirectoryName(camera.imagePath);
         }
 
@@ -411,8 +418,8 @@ namespace ASCOM.SimCDC
             scw.Show();
       
         }
-        private bool useCapture;
-        public bool UseCapture
+        private static bool useCapture;
+        public static bool UseCapture
         {
             get { return useCapture; }
             set { useCapture = value; }
