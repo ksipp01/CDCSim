@@ -224,8 +224,12 @@ namespace ASCOM.SimCDC
 
         //end add
 
-      
-     
+        public static Bitmap resizeImage(Bitmap imgToResize, System.Drawing.Size size)
+        {
+            return (new Bitmap(imgToResize, size));
+        }
+
+
 
 
         public void GetCapture()
@@ -240,7 +244,7 @@ namespace ASCOM.SimCDC
                     //     SetWinFullScreen(handle);
                     System.Threading.Thread.Sleep(200);
                     ScreenCapture sc = new ScreenCapture();
-                    Image img = sc.CaptureScreen();
+             //       Image img = sc.CaptureScreen();
                     sc.CaptureWindowToFile(handle, Path.Combine(fullPath, @"SimCapture.jpg"), ImageFormat.Jpeg);
                 }
                 else
@@ -248,15 +252,17 @@ namespace ASCOM.SimCDC
 
                     //     string filename = SetupDialogForm.SetImage;
                     Image img;
-                  //  Bitmap bmp;
+   //           //      Bitmap bmp;
                     string tempFile = Path.GetDirectoryName(SetupDialogForm.SetImage) + @"\" + Path.GetFileNameWithoutExtension(SetupDialogForm.SetImage) + "_temp.jpg";
-                    using (FileStream stream = new FileStream(SetupDialogForm.SetImage, FileMode.Open, FileAccess.Read))
-                    {
-                        img = Image.FromStream(stream);
-                        stream.Dispose();
-                    }
-
-                      Bitmap bmp = (Bitmap)img;
+                    //using (FileStream stream = new FileStream(SetupDialogForm.SetImage, FileMode.Open, FileAccess.Read))
+                    //{
+                    //    img = Image.FromStream(stream);
+                    //    stream.Dispose();
+                    //}
+                    Bitmap bmp = new Bitmap(SetupDialogForm.SetImage);
+                   bmp = resizeImage(bmp, new System.Drawing.Size(SetupDialogForm.Width, SetupDialogForm.Height)); // resize fisrt speedsup blur
+               //     Bitmap bmp = new Bitmap(tempFile);
+                 //   Bitmap bmp = (Bitmap)img;
                     //      int pos = setup.focuser.Position;
 
                     //  int pos = SetupDialogForm.focuser.Position;
@@ -269,17 +275,18 @@ namespace ASCOM.SimCDC
                             amount = 10;
                         //   if (((focusPos - pos) > 100) || ((pos-focusPos > 100)))
                         if (amount > 0)
-                            img = blr.ApplyBlur(bmp, amount + 1);
+     //                      img = blr.ApplyBlur(bmp, amount + 1);
                         //
-                        //    bmp = blr.ApplyBlur(bmp, amount + 1);
+                           bmp = blr.ApplyBlur(bmp, amount + 1);
                         //  img = (Image)bmp;
 
                         // bmp.Save(tempFile, System.Drawing.Imaging.ImageFormat.Bmp);
-                        if (amount == 0)
-                            return;
+                        //if (amount == 0)
+                        //    return;
                     }
-                      img.Save(tempFile, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    
+     //                img.Save(tempFile, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    bmp.Save(tempFile, System.Drawing.Imaging.ImageFormat.Jpeg);
+
 
 
 

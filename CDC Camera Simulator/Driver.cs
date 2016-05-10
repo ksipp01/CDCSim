@@ -2200,7 +2200,7 @@ namespace ASCOM.SimCDC
         /// full frame image data.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body")]
-        //  Blur blr;
+       
         string tempFile = "";
         private void ReadImageFile()
         {
@@ -2313,7 +2313,7 @@ namespace ASCOM.SimCDC
 
                 }
 
-
+                
                 //x0 = bayerOffsetX;
                 //x1 = (bayerOffsetX + 1) & 1;
                 //y0 = bayerOffsetY;
