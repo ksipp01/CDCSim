@@ -116,7 +116,7 @@ namespace ASCOM.SimCDC
                 //   int amount = Math.Abs(pos / 100 - focusPos  / 100);
                 if (SetupDialogForm.FocusStepSize != 0)  // first run capture can't use this.  
                 {
-                    int amount = Math.Abs(SetupDialogForm.focuser.Position / SetupDialogForm.FocusStepSize - SetupDialogForm.FocusPoint / SetupDialogForm.FocusStepSize);
+                    int amount = Math.Abs((SetupDialogForm.focuser.Position + (SetupDialogForm.FocusStepSize/2)) / SetupDialogForm.FocusStepSize - SetupDialogForm.FocusPoint / SetupDialogForm.FocusStepSize);
                     if (amount > 10)
                         amount = 10;
                     //   if (((focusPos - pos) > 100) || ((pos-focusPos > 100)))
