@@ -48,7 +48,9 @@ CDC A free planetarium program (https://www.ap-i.net/skychart/en/start) that can
 This works best with dual displays but can be done on one.  
 Set up as follows: 
 Open CDC, Connect to ASCOM Mount.  Use Setup -> Display -> Finder rectangle to define a FOV that matches your Imaging chip.  Adjust rotation so the rectangle is square in the FOV.  Set the CDC FOV (Setup -> set FOV) so the CCD rectangle is completely visible in the center of the entire FOV and takes up about 50% of the entire FOV, make Sure CDC is maximized(full screen) AND on Primary display, for now.  If only using 1 display, remember about where the bounds of the CCD rectangle are, you will have imaging application and setup windows over part of CDC, that's ok) Make sure "Screen Capture" is checked. Press the Set button then Left click and drag the mouse over the CCD FOV rectangle, then double click to set.  Click Ok to close setup, then OK to close chooser.  The CDC window can now be moved to secondary display now but needs to be maximized to preserve the FOV selection.  
-If CDC capture is not wanted, but focus simulation is, Push Select Image and navigiate to a desired image.  Adjust the CCD Height and Width in the Setup menu as needed.  (The Screen Capture check box will automatically uncheck when selecting a specific image).   
-  
+If CDC capture is not wanted, but focus simulation is, Push Select Image and navigiate to a desired image.  Adjust the CCD Height and Width in the Setup menu as needed.  (The Screen Capture check box will automatically uncheck when selecting a specific image).  
+
+ 
+(4-30-2019)  
 
      
