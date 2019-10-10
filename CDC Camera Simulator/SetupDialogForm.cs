@@ -13,10 +13,11 @@ namespace ASCOM.SimCDC
     public partial class SetupDialogForm : Form
     {
 
-
+        // 9-30-19 added UseDSS
 
         // add 
         public static ASCOM.DriverAccess.Focuser focuser;
+        public static ASCOM.DriverAccess.Telescope telescope;
 
 
 
@@ -62,6 +63,15 @@ namespace ASCOM.SimCDC
                 MessageBox.Show(other.Message);
             }
         }
+
+
+
+        //added 10-7-19 for dss
+        //private static string dssRA;
+        //private static string dssDEC;
+        //private static string dssScale;
+        //private static string dssWidth;
+        //private static string dssHeight;
 
         internal void InitProperties(Camera theCamera)
         {
@@ -129,9 +139,15 @@ namespace ASCOM.SimCDC
             this.textBoxFocusStepSize.Text = theCamera.FocusStepSize.ToString(CultureInfo.CurrentCulture);
             this.checkBoxUseFocusSim.Checked = theCamera.useFocusSim;
             this.checkBoxUseCapture.Checked = theCamera.useCapture;
+            checkBox1.Checked = theCamera.useDSS;
             capturePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ASCOM_SimCDC_Camera";
 
             this.camera = theCamera;
+
+
+            //dssWidth = theCamera.CameraXSize.ToString(CultureInfo.CurrentCulture);
+            //dssHeight = theCamera.CameraYSize.ToString(CultureInfo.CurrentCulture);
+
         }
 
         private static int focusPoint;
@@ -142,6 +158,34 @@ namespace ASCOM.SimCDC
         private static int _yPoint;
         private static string capturePath;
         private static string setImage;
+        private static string ra;
+        private static string dec;
+
+        private static bool useDSS = true;  // for some reason not reading checkbox1 properly 
+        public static bool UseDSS
+        {
+            get { return useDSS; }
+            set { useDSS = value; }
+        }
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+                useDSS = true;
+            else
+                useDSS = false;
+        }
+
+
+        public static string Ra
+        { 
+            get { return telescope.RightAscension.ToString();  }
+            set { ra = value; }
+        }
+        public static string Dec
+        {
+            get { return telescope.Declination.ToString(); }
+            set { dec = value; }
+        }
 
         public static int Height
         {
@@ -233,9 +277,14 @@ namespace ASCOM.SimCDC
             camera.useFocusSim = this.checkBoxUseFocusSim.Checked;
             camera.xPoint = _xPoint;
             camera.yPoint = _yPoint;
+
+            camera.useCapture = this.checkBoxUseCapture.Checked;
+            camera.useDSS = this.checkBox1.Checked;
             if (useCapture)
             camera.imagePath = Path.Combine(CapturePath, @"SimCapture.jpg");
-            camera.useCapture = this.checkBoxUseCapture.Checked;
+            if (useDSS)
+            camera.imagePath = Path.Combine(CapturePath, @"SimCapture.jpg");
+
             // add
 
 
@@ -324,12 +373,21 @@ namespace ASCOM.SimCDC
 
 
        private string focusId;
+       private string mountId;
 
         private bool IsConnected
         {
             get
             {
                 return ((SetupDialogForm.focuser != null) && (focuser.Connected == true));
+            }
+        }
+
+        private bool IsMountConnected
+        {
+            get
+            {
+                return ((SetupDialogForm.telescope != null) && (telescope.Connected == true));
             }
         }
 
@@ -366,6 +424,41 @@ namespace ASCOM.SimCDC
                     msg += " - " + ex.InnerException.Message;
                 MessageBox.Show(string.Format("Choose failed with error {0}", msg));
             }
+// added 10-7-19 try to connect mount too for DSS image tracking
+            if (telescope != null && telescope.Connected) return;
+            try
+            {
+                mountId = Telescope.Choose(mountId);
+                if (IsMountConnected)
+                {
+                    telescope.Connected = false;
+                    //  timer1.Stop();
+                    // SetUIState();
+                    return;
+                }
+                else
+                {
+                    //   if (driver == null)
+                    telescope = new ASCOM.DriverAccess.Telescope(mountId);
+                    //   driver.Link = true;
+                    telescope.Connected = true;
+                    // SetUIState();
+                    //timer1.Start();
+                }
+
+
+                // lblCameraName.Text = cameraId;
+            }
+            catch (Exception ex)
+            {
+                String msg = ex.Message;
+                if (ex.InnerException != null)
+                    msg += " - " + ex.InnerException.Message;
+                MessageBox.Show(string.Format("Choose failed with error {0}", msg));
+            }
+
+
+
         }
 
         private void checkBoxUseFocusSim_CheckedChanged(object sender, EventArgs e)
@@ -431,5 +524,8 @@ namespace ASCOM.SimCDC
             else
                 useCapture = false;
         }
+       
+       
+       
     }
 }

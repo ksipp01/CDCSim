@@ -80,6 +80,9 @@ namespace ASCOM.SimCDC
             this.labelSizeY = new System.Windows.Forms.Label();
             this.labelSizeX = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseCapture = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.buttonCapture = new System.Windows.Forms.Button();
             this.buttonSetImageFile = new System.Windows.Forms.Button();
             this.checkBoxApplyNoise = new System.Windows.Forms.CheckBox();
@@ -98,8 +101,6 @@ namespace ASCOM.SimCDC
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxFocusStepSize = new System.Windows.Forms.TextBox();
             this.textBoxFocusPoint = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.checkBoxUseCapture = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -624,6 +625,7 @@ namespace ASCOM.SimCDC
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.checkBox1);
             this.groupBox2.Controls.Add(this.checkBoxUseCapture);
             this.groupBox2.Controls.Add(this.button1);
             this.groupBox2.Controls.Add(this.buttonCapture);
@@ -631,10 +633,43 @@ namespace ASCOM.SimCDC
             this.groupBox2.Controls.Add(this.checkBoxApplyNoise);
             this.groupBox2.Location = new System.Drawing.Point(323, 130);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(121, 133);
+            this.groupBox2.Size = new System.Drawing.Size(121, 138);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Simulation";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(13, 121);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(48, 17);
+            this.checkBox1.TabIndex = 6;
+            this.checkBox1.Text = "DSS";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxUseCapture
+            // 
+            this.checkBoxUseCapture.AutoSize = true;
+            this.checkBoxUseCapture.Location = new System.Drawing.Point(9, 67);
+            this.checkBoxUseCapture.Name = "checkBoxUseCapture";
+            this.checkBoxUseCapture.Size = new System.Drawing.Size(100, 17);
+            this.checkBoxUseCapture.TabIndex = 5;
+            this.checkBoxUseCapture.Text = "Screen Capture";
+            this.checkBoxUseCapture.UseVisualStyleBackColor = true;
+            this.checkBoxUseCapture.CheckedChanged += new System.EventHandler(this.checkBoxUseCapture_CheckedChanged);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(65, 94);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(50, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Set Area";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // buttonCapture
             // 
@@ -815,27 +850,6 @@ namespace ASCOM.SimCDC
             this.textBoxFocusPoint.Size = new System.Drawing.Size(46, 20);
             this.textBoxFocusPoint.TabIndex = 0;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(65, 94);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(50, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Set Area";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // checkBoxUseCapture
-            // 
-            this.checkBoxUseCapture.AutoSize = true;
-            this.checkBoxUseCapture.Location = new System.Drawing.Point(9, 67);
-            this.checkBoxUseCapture.Name = "checkBoxUseCapture";
-            this.checkBoxUseCapture.Size = new System.Drawing.Size(100, 17);
-            this.checkBoxUseCapture.TabIndex = 5;
-            this.checkBoxUseCapture.Text = "Screen Capture";
-            this.checkBoxUseCapture.UseVisualStyleBackColor = true;
-            this.checkBoxUseCapture.CheckedChanged += new System.EventHandler(this.checkBoxUseCapture_CheckedChanged);
-            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -861,7 +875,7 @@ namespace ASCOM.SimCDC
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Simulator Setup";
+            this.Text = "Simulator Setup2";
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.groupBoxCCD.ResumeLayout(false);
@@ -959,5 +973,6 @@ namespace ASCOM.SimCDC
         private System.Windows.Forms.Button buttonCapture;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox checkBoxUseCapture;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

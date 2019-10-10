@@ -9,6 +9,7 @@ using System.Drawing.Imaging;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows;
+using System.Net;
 
 
 
@@ -229,13 +230,28 @@ namespace ASCOM.SimCDC
             return (new Bitmap(imgToResize, size));
         }
 
+        private static string dssURL()
+        {
+            string baseURL = "http://skyservice.pha.jhu.edu/DR9/ImgCutout/getjpeg.aspx?";
+            string RA = SetupDialogForm.Ra.ToString();
+            string DEC = SetupDialogForm.Dec.ToString();
+            string scale = "1.264";
+            string width = SetupDialogForm.Width.ToString();
+            string height = SetupDialogForm.Height.ToString();
 
+
+            return baseURL + "ra=" + RA + "&dec=" + DEC + "&scale=" + scale + "&width=" + width + "&height=" + height;
+        }
 
 
         public void GetCapture()
         {
             try
             {
+
+               
+
+
 
                 if (SetupDialogForm.UseCapture)
                 {
@@ -246,11 +262,44 @@ namespace ASCOM.SimCDC
                     ScreenCapture sc = new ScreenCapture();
              //       Image img = sc.CaptureScreen();
                     sc.CaptureWindowToFile(handle, Path.Combine(fullPath, @"SimCapture.jpg"), ImageFormat.Jpeg);
-                }
+                       }
+
+                    if (SetupDialogForm.UseDSS)
+                    {
+
+                        string url = dssURL();
+                    WebClient webclient = new WebClient();
+                    //  webclient.DownloadFile("http://skyservice.pha.jhu.edu/DR9/ImgCutout/getjpeg.aspx?ra=145.267&dec=34.733&scale=0.79224&width=400&height=400", Path.Combine(fullPath, "_temp.jpg"));
+                    webclient.DownloadFile(url, Path.Combine(fullPath, @"SimCapture.jpg"));
+
+                    //Bitmap bmp = new Bitmap(SetupDialogForm.SetImage);
+                    Bitmap bmp = new Bitmap(Path.Combine(fullPath, @"SimCapture.jpg"));
+                    bmp = resizeImage(bmp, new System.Drawing.Size(SetupDialogForm.Width, SetupDialogForm.Height)); // resize fisrt speedsup blur
+                                                                                                           
+                    if (SetupDialogForm.FocusStepSize != 0)  // first run capture can't use this.  
+                    {
+
+                        int amount = Math.Abs(SetupDialogForm.focuser.Position / SetupDialogForm.FocusStepSize - SetupDialogForm.FocusPoint / SetupDialogForm.FocusStepSize);
+                        if (amount > 10)
+                            amount = 10;
+
+                        if (amount > 0)
+                         
+                            bmp = blr.ApplyBlur(bmp, amount + 1);
+                     
+                    }
+                  
+                    bmp.Save(Path.Combine(fullPath, @"SimCapture.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg);
+
+
+               }
+
+
                 else
                 {
 
-                    //     string filename = SetupDialogForm.SetImage;
+
+                                      //     string filename = SetupDialogForm.SetImage;
                     Image img;
    //           //      Bitmap bmp;
                     string tempFile = Path.GetDirectoryName(SetupDialogForm.SetImage) + @"\" + Path.GetFileNameWithoutExtension(SetupDialogForm.SetImage) + "_temp.jpg";
