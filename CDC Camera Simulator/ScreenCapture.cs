@@ -270,10 +270,26 @@ namespace ASCOM.SimCDC
                         string url = dssURL();
                     WebClient webclient = new WebClient();
                     //  webclient.DownloadFile("http://skyservice.pha.jhu.edu/DR9/ImgCutout/getjpeg.aspx?ra=145.267&dec=34.733&scale=0.79224&width=400&height=400", Path.Combine(fullPath, "_temp.jpg"));
-                    webclient.DownloadFile(url, Path.Combine(fullPath, @"SimCapture.jpg"));
 
+                    //  **** change to save to defualt image path then do the themp copy......
+
+                    webclient.DownloadFile(url, Path.Combine(fullPath, @"SimCapture.jpg"));
+                    //    webclient.DownloadFile(url, Path.Combine(Path.GetDirectoryName(SetupDialogForm.SetImage), @"DSSimage.jpg"));
+
+
+                    // string tempFile = Path.GetDirectoryName(SetupDialogForm.SetImage) + @"\" + Path.GetFileNameWithoutExtension(SetupDialogForm.SetImage) + "_temp.jpg";
+                    //   string tempFile = Path.GetDirectoryName(fullPath) + @"\" + "DSSimage_temp.jpg";
+                  string tempFile =  Path.Combine(fullPath, @"SimCapture_temp.jpg");
+                    
+                    //  string tempFile = Path.GetDirectoryName(SetupDialogForm.SetImage) + @"\" + "DSSimage_temp.jpg";
+                    string tempFile2 = Path.Combine(fullPath, @"SimCapture.jpg");
                     //Bitmap bmp = new Bitmap(SetupDialogForm.SetImage);
-                    Bitmap bmp = new Bitmap(Path.Combine(fullPath, @"SimCapture.jpg"));
+                    //     Bitmap bmp = new Bitmap(Path.Combine(fullPath, @"SimCapture.jpg"));  // orig working
+
+                    Bitmap bmp = new Bitmap(tempFile2); 
+
+
+                //    File.Delete(Path.Combine(fullPath, @"SimCapture.jpg"));
                     bmp = resizeImage(bmp, new System.Drawing.Size(SetupDialogForm.Width, SetupDialogForm.Height)); // resize fisrt speedsup blur
                                                                                                            
                     if (SetupDialogForm.FocusStepSize != 0)  // first run capture can't use this.  
@@ -284,12 +300,16 @@ namespace ASCOM.SimCDC
                             amount = 10;
 
                         if (amount > 0)
-                         
-                            bmp = blr.ApplyBlur(bmp, amount + 1);
+
+                                bmp = blr.ApplyBlur(bmp, amount + 1);
+                          //  bmp = blr.ApplyBlur(bmp, 20);
                      
                     }
-                  
-                    bmp.Save(Path.Combine(fullPath, @"SimCapture.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg);
+
+                    //   File.Delete(Path.Combine(fullPath, @"SimCapture.jpg"));
+                    bmp.Save(tempFile, System.Drawing.Imaging.ImageFormat.Jpeg);
+               //     bmp.Save(Path.Combine(fullPath, @"SimCapture.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg);
+                    Thread.Sleep(100);
 
 
                }

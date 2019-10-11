@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 
+
 namespace ASCOM.SimCDC
 {
     class Blur
@@ -27,16 +28,21 @@ namespace ASCOM.SimCDC
         //        }
         //    }
         //}
-      //  int nAmount = 3;  // amount of blur
+        //  int nAmount = 3;  // amount of blur
         public Bitmap ApplyBlur(Bitmap image, int nAmount)
         {
-        //    btnApply.Enabled = false;
-         //   this.Cursor = Cursors.WaitCursor;
-            image = FastBoxBlur(image, nAmount);
-          //  picConvolved.Image = FastBoxBlur(picOriginal.Image, (int)nAmount.Value);
+            //    btnApply.Enabled = false;
+            //   this.Cursor = Cursors.WaitCursor;
 
-          //  this.Cursor = Cursors.Default;
-           // btnApply.Enabled = true;
+
+            image = FastBoxBlur(image, nAmount); //orign try blur 2 below. 
+
+
+
+            //  picConvolved.Image = FastBoxBlur(picOriginal.Image, (int)nAmount.Value);
+          //  image = Blur2(image, nAmount); // try blur2
+            //  this.Cursor = Cursors.Default;
+            // btnApply.Enabled = true;
             return image;
         }
 
@@ -254,7 +260,9 @@ namespace ASCOM.SimCDC
                 pBase = null;
             }
         }
+       
+
 
 
     }
-}
+    }
